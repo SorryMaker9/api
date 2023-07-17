@@ -5,7 +5,7 @@
  * Date: 18-9-13 上午9:17
  * History:
  */
-package com.demo.core.dynamictable;
+package tech.cqxqg.youcai.core.dynamictable;
 
 
 import java.util.Objects;

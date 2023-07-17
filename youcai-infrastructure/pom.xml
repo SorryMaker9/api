@@ -3,12 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.demo</groupId>
-		<artifactId>demo</artifactId>
+		<groupId>tech.cqxqg.youcai</groupId>
+		<artifactId>api</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>demo-infrastructure</artifactId>
+	<artifactId>youcai-infrastructure</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -29,8 +29,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.demo</groupId>
-			<artifactId>demo-common</artifactId>
+			<groupId>tech.cqxqg.youcai</groupId>
+			<artifactId>youcai-common</artifactId>
 		</dependency>
 
 		<dependency>

@@ -4,9 +4,9 @@ server:
     context-path: /api
 spring:
   profiles:
-    active: dev
+    active: test
   application:
-    name: swak-demo-server
+    name: local-test-server
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss.SSS
     time-zone: GMT+8
@@ -26,7 +26,7 @@ spring:
 #  application:
 #    name: ${spring.application.name}
 #  scan:
-#    base-packages: com.demo
+#    base-packages: tech.cqxqg.youcai
 #  protocol:
 #    name: dubbo
 #    port: -1
@@ -71,9 +71,9 @@ db:
 spring:
   profiles: test
 db:
-  url: jdbc:mysql://127.0.0.1:3306/swak?allowMultiQueries=true&serverTimezone=Asia/Shanghai
+  url: jdbc:mysql://10.1.0.50:3306/youcai?allowMultiQueries=true&serverTimezone=Asia/Shanghai
   username: root
-  password: 123456
+  password: youcai_test
 ---
 spring:
   profiles: prod

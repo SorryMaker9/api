@@ -1,6 +1,6 @@
-package com.demo.user.config;
+package tech.cqxqg.youcai.user.config;
 
-import com.demo.core.config.JacksonSerializerFeatureCompatibleForJackson;
+import tech.cqxqg.youcai.core.config.JacksonSerializerFeatureCompatibleForJackson;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;

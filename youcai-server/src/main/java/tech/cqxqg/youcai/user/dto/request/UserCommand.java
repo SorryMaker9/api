@@ -1,4 +1,4 @@
-package com.demo.user.dto.request;
+package tech.cqxqg.youcai.user.dto.request;
 
 import com.swak.frame.dto.base.Command;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.demo.core.enums;
+package tech.cqxqg.youcai.core.enums;
 
 
 import com.swak.frame.enums.IResultCode;

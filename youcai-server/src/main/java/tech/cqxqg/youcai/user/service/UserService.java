@@ -1,8 +1,8 @@
-package com.demo.user.service;
+package tech.cqxqg.youcai.user.service;
 
-import com.demo.user.dto.UserVo;
-import com.demo.user.dto.request.UserCommand;
-import com.demo.user.dto.request.UserPageReq;
+import tech.cqxqg.youcai.user.dto.UserVo;
+import tech.cqxqg.youcai.user.dto.request.UserCommand;
+import tech.cqxqg.youcai.user.dto.request.UserPageReq;
 import com.swak.frame.dto.Pagination;
 import com.swak.frame.dto.Result;
 

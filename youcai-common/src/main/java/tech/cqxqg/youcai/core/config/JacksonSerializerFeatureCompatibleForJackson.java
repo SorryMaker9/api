@@ -1,4 +1,4 @@
-package com.demo.core.config;
+package tech.cqxqg.youcai.core.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import java.io.IOException;
 import java.util.List;
 
-import static com.demo.core.config.JacksonSerializerFeatureCompatibleForJackson.SerializerFeature.*;
+import static tech.cqxqg.youcai.core.config.JacksonSerializerFeatureCompatibleForJackson.SerializerFeature.*;
 
 public class JacksonSerializerFeatureCompatibleForJackson extends BeanSerializerModifier {
 

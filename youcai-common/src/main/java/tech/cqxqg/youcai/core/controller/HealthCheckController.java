@@ -1,4 +1,4 @@
-package com.demo.core.controller;
+package tech.cqxqg.youcai.core.controller;
 
 import java.util.Enumeration;
 

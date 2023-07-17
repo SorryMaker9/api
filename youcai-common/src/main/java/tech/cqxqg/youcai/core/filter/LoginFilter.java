@@ -1,4 +1,4 @@
-package com.demo.core.filter;
+package tech.cqxqg.youcai.core.filter;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;

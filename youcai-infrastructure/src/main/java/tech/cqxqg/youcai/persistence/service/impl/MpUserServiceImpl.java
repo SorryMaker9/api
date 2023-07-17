@@ -1,13 +1,11 @@
-package com.demo.persistence.service.impl;
+package tech.cqxqg.youcai.persistence.service.impl;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.demo.persistence.service.MpUserService;
-import com.demo.persistence.entity.SysUser;
-import com.demo.persistence.mapper.UserMapper;
+import tech.cqxqg.youcai.persistence.service.MpUserService;
+import tech.cqxqg.youcai.persistence.entity.SysUser;
+import tech.cqxqg.youcai.persistence.mapper.UserMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 public class MpUserServiceImpl extends ServiceImpl<UserMapper, SysUser>

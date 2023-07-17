@@ -1,4 +1,4 @@
-package com.demo.user.constants;
+package tech.cqxqg.youcai.user.constants;
 
 import com.swak.frame.enums.IResultCode;
 

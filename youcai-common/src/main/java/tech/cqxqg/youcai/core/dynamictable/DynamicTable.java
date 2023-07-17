@@ -1,4 +1,4 @@
-package com.demo.core.dynamictable;
+package tech.cqxqg.youcai.core.dynamictable;
 
 import java.lang.annotation.*;
 

@@ -1,6 +1,6 @@
-package com.demo.user.config;
+package tech.cqxqg.youcai.user.config;
 
-import com.demo.core.enums.Constants;
+import tech.cqxqg.youcai.core.enums.Constants;
 import com.swak.frame.environment.SystemEnvironmentConfigurable;
 import com.swak.frame.eventbus.EventBusConfig;
 import org.springframework.context.annotation.Bean;

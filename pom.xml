@@ -9,8 +9,8 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.demo</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>tech.cqxqg.youcai</groupId>
+    <artifactId>api</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -21,23 +21,23 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
     </properties>
     <modules>
-        <module>demo-common</module>
-        <module>demo-infrastructure</module>
-        <module>demo-server</module>
+        <module>youcai-common</module>
+        <module>youcai-infrastructure</module>
+        <module>youcai-server</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
 
             <dependency>
-                <groupId>com.demo</groupId>
-                <artifactId>demo-common</artifactId>
+                <groupId>tech.cqxqg.youcai</groupId>
+                <artifactId>youcai-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.demo</groupId>
-                <artifactId>demo-infrastructure</artifactId>
+                <groupId>tech.cqxqg.youcai</groupId>
+                <artifactId>youcai-infrastructure</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

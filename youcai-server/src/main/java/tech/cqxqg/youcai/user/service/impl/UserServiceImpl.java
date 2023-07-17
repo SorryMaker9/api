@@ -1,20 +1,20 @@
-package com.demo.user.service.impl;
+package tech.cqxqg.youcai.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.demo.user.constants.UserResultCode;
-import com.demo.user.converter.UserConverter;
-import com.demo.core.enums.ResultCode;
-import com.demo.core.filter.RequestContext;
-import com.demo.persistence.entity.SysUser;
-import com.demo.persistence.service.MpUserService;
-import com.demo.user.dto.UserVo;
-import com.demo.user.dto.request.UserCommand;
-import com.demo.user.dto.request.UserPageReq;
+import tech.cqxqg.youcai.user.constants.UserResultCode;
+import tech.cqxqg.youcai.user.converter.UserConverter;
+import tech.cqxqg.youcai.core.enums.ResultCode;
+import tech.cqxqg.youcai.core.filter.RequestContext;
+import tech.cqxqg.youcai.persistence.entity.SysUser;
+import tech.cqxqg.youcai.persistence.service.MpUserService;
+import tech.cqxqg.youcai.user.dto.UserVo;
+import tech.cqxqg.youcai.user.dto.request.UserCommand;
+import tech.cqxqg.youcai.user.dto.request.UserPageReq;
 
-import com.demo.user.service.UserService;
+import tech.cqxqg.youcai.user.service.UserService;
 import com.swak.frame.dto.PageInfo;
 import com.swak.frame.dto.Pagination;
 import com.swak.frame.dto.Result;

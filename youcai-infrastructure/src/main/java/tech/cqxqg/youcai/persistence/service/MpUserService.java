@@ -1,8 +1,8 @@
-package com.demo.persistence.service;
+package tech.cqxqg.youcai.persistence.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.demo.persistence.entity.SysUser;
+import tech.cqxqg.youcai.persistence.entity.SysUser;
 
 public interface MpUserService extends IService<SysUser> {
 

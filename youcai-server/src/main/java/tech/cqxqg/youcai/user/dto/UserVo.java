@@ -1,4 +1,4 @@
-package com.demo.user.dto;
+package tech.cqxqg.youcai.user.dto;
 
 import com.swak.frame.dto.base.VO;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.demo.core.advice;
+package tech.cqxqg.youcai.core.advice;
 
-import com.demo.core.enums.ResultCode;
+import tech.cqxqg.youcai.core.enums.ResultCode;
 import com.swak.frame.dto.Result;
 import com.swak.frame.enums.BasicErrCode;
 import com.swak.frame.exception.BizException;
@@ -22,7 +22,6 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.Objects;
 import java.util.Set;
 
 @Slf4j

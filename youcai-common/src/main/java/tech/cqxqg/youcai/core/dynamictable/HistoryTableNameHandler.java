@@ -1,4 +1,4 @@
-package com.demo.core.dynamictable;
+package tech.cqxqg.youcai.core.dynamictable;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TableNameHandler;
 import org.apache.commons.lang3.StringUtils;
