@@ -1,0 +1,83 @@
+server:
+  port: 8010
+  servlet:
+    context-path: /api
+spring:
+  profiles:
+    active: dev
+  application:
+    name: swak-demo-server
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
+    time-zone: GMT+8
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 100
+      idle-timeout: 600000
+      max-lifetime: 3600000
+      connection-timeout: 60000
+      connection-test-query: SELECT 1
+#dubbo:
+#  application:
+#    name: ${spring.application.name}
+#  scan:
+#    base-packages: com.demo
+#  protocol:
+#    name: dubbo
+#    port: -1
+#  registry:
+#    protocol: multicast
+#    address: 239.255.255.255:1234
+#  provider:
+#    timeout: 10000
+#  consumer:
+#    check: false
+#    loadbalance: roundrobin
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%15.15t] %-40.40logger{39} : %X{GLOBAL_REQUEST_ID}%m%n"
+    console: ${logging.pattern.file}
+  file:
+    name: ${user.home}/logs/${spring.application.name}/${spring.application.name}.log
+    max-history: 90
+    max-size: 1GB
+    total-size-cap: 20GB
+  level:
+    com.alibaba.nacos.client.config.impl.ClientWorker: WARN
+    com.alibaba.nacos.client.naming: WARN
+mybatis-plus:
+  mapper-locations: mapper/*.xml
+  global-config:
+    db-config:
+      logic-delete-value: -1
+      logic-not-delete-value: 0
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+---
+spring:
+  profiles: dev
+db:
+  url: jdbc:mysql://124.222.236.78:3306/swak?allowMultiQueries=true&serverTimezone=Asia/Shanghai
+  username: swak
+  password: swak@123
+---
+spring:
+  profiles: test
+db:
+  url: jdbc:mysql://127.0.0.1:3306/swak?allowMultiQueries=true&serverTimezone=Asia/Shanghai
+  username: root
+  password: 123456
+---
+spring:
+  profiles: prod
+db:
+  url: jdbc:mysql://127.0.0.1:3306/swak?allowMultiQueries=true&serverTimezone=Asia/Shanghai
+  username: root
+  password: 123456

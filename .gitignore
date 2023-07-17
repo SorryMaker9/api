@@ -1,0 +1,13 @@
+.project
+.classpath
+.settings
+.DS_Store
+.factorypath
+target
+dependency-reduced-pom.xml
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
