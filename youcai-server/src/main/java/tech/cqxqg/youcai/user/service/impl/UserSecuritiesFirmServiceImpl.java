@@ -206,7 +206,7 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
 
 
     /**
-     * 查询用户证券公司的用户胡公司id
+     * 查询用户证券公司的用户id和公司id
      */
     private UserSecuritiesFirms getUserSecuritiesFirms(Long id) {
 
