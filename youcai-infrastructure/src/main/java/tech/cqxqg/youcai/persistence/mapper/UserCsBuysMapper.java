@@ -1,11 +1,9 @@
 package tech.cqxqg.youcai.persistence.mapper;
 
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
-import tech.cqxqg.youcai.persistence.entity.SysUser;
+import tech.cqxqg.youcai.persistence.entity.UserCsBuys;
 
 @Repository
-public interface UserMapper extends BaseMapper<SysUser> {
-
+public interface UserCsBuysMapper extends BaseMapper<UserCsBuys> {
 }
