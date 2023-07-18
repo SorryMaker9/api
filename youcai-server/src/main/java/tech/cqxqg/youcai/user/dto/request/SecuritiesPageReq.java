@@ -13,4 +13,5 @@ public class SecuritiesPageReq extends PageInfo {
      * 证券名称
      */
     private String name;
+
 }

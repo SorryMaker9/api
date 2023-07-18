@@ -22,4 +22,5 @@ public class UserCssPageReq extends PageInfo {
      * 证券代码
      */
     private String code;
+
 }

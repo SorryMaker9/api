@@ -4,16 +4,24 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.BeanUtils;
+import tech.cqxqg.youcai.persistence.entity.ChinaSecurities;
 import tech.cqxqg.youcai.user.constants.UserResultCode;
+import tech.cqxqg.youcai.user.converter.SecuritiesConverter;
 import tech.cqxqg.youcai.user.converter.UserConverter;
 import tech.cqxqg.youcai.core.enums.ResultCode;
 import tech.cqxqg.youcai.core.filter.RequestContext;
 import tech.cqxqg.youcai.persistence.entity.SysUser;
 import tech.cqxqg.youcai.persistence.service.MpUserService;
+import tech.cqxqg.youcai.user.dto.SecuritiesVo;
 import tech.cqxqg.youcai.user.dto.UserVo;
+import tech.cqxqg.youcai.user.dto.request.SecuritiesCommand;
 import tech.cqxqg.youcai.user.dto.request.UserCommand;
+import tech.cqxqg.youcai.user.dto.request.UserCsBuysCommand;
 import tech.cqxqg.youcai.user.dto.request.UserPageReq;
 
+import tech.cqxqg.youcai.user.service.SecuritiesService;
+import tech.cqxqg.youcai.user.service.UserCsBuysService;
 import tech.cqxqg.youcai.user.service.UserService;
 import com.swak.frame.dto.PageInfo;
 import com.swak.frame.dto.Pagination;
@@ -26,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserConverter userConverter;
+
 
 
     @Override
@@ -118,6 +128,8 @@ public class UserServiceImpl implements UserService {
         }
         return Result.success(Pagination.builder(userVos, PageInfo.page(query, page.getTotal())));
     }
+
+
 
     @Override
     public Result<Void> delete(List<Long> ids) {

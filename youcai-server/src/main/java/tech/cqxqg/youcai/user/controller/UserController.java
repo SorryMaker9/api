@@ -25,6 +25,7 @@ public class UserController {
     @Resource
     private UserService userService;
 
+
     /**
      * 分页查询
      * @param query
@@ -51,4 +52,5 @@ public class UserController {
     public Result<Void> editUser(@RequestBody @Validated UserCommand command) {
         return userService.updateUser(command);
     }
+
 }
