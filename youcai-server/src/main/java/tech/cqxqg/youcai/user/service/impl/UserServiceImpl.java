@@ -10,7 +10,7 @@ import tech.cqxqg.youcai.core.enums.ResultCode;
 import tech.cqxqg.youcai.core.filter.RequestContext;
 import tech.cqxqg.youcai.persistence.entity.SysUser;
 import tech.cqxqg.youcai.persistence.service.MpUserService;
-import tech.cqxqg.youcai.user.dto.UserVo;
+import tech.cqxqg.youcai.user.dto.vo.UserVo;
 import tech.cqxqg.youcai.user.dto.request.UserCommand;
 import tech.cqxqg.youcai.user.dto.request.UserPageReq;
 

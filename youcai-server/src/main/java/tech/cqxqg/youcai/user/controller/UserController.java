@@ -1,6 +1,6 @@
 package tech.cqxqg.youcai.user.controller;
 
-import tech.cqxqg.youcai.user.dto.UserVo;
+import tech.cqxqg.youcai.user.dto.vo.UserVo;
 import tech.cqxqg.youcai.user.dto.request.UserCommand;
 import tech.cqxqg.youcai.user.dto.request.UserPageReq;
 import tech.cqxqg.youcai.user.service.UserService;
