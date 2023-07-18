@@ -26,7 +26,7 @@ public class LoginFilter implements Filter {
         try {
 
             // TODO 登录拦截，设置userId，直接RequestContext.getUserId();
-            RequestContext.setUserId("admin");
+            RequestContext.setUserId("1");
             chain.doFilter(request, response);
         } finally {
             RequestContext.clear();
