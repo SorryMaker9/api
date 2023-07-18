@@ -225,7 +225,7 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
 
 
     /**
-     * 修改证券公司记录数
+     * 修改证券公司用户数
      * @param securitiesFirmId 证券公司id
      * @param operation 修改操作
      */
