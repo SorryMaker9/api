@@ -3,6 +3,7 @@ package tech.cqxqg.youcai.user.util;
 
 import org.apache.commons.lang3.StringUtils;
 import tech.cqxqg.youcai.user.constants.MultipleConstants;
+import tech.cqxqg.youcai.user.constants.StockConstants;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -39,8 +40,8 @@ public class ConvertUtil {
         EXCLUDED_PROPERTIES.add("countStocks");
         EXCLUDED_PROPERTIES.add("countFloorFunds");
         EXCLUDED_PROPERTIES.add("status");
-        EXCLUDED_PROPERTIES.add("createTime");
-        EXCLUDED_PROPERTIES.add("updateTime");
+        EXCLUDED_PROPERTIES.add("createdTime");
+        EXCLUDED_PROPERTIES.add("updatedTime");
         EXCLUDED_PROPERTIES.add("countUsers");
     }
 
@@ -62,7 +63,7 @@ public class ConvertUtil {
         String name = destination.getClass().getName();
         if (!StringUtils.isBlank(name)) {
             try {
-                if (name.contains("persistence.entity")) {
+                if (name.contains(StockConstants.TARGET_ENTITY)) {
                     //转换数据存入到数据库
                     convertToDB(source, destination);
                 } else {
@@ -112,8 +113,6 @@ public class ConvertUtil {
                     destField.set(destination, convertAndDivide((Integer)value, MULTIPLY_FACTORY.get(fieldName)));
                 }
                 break;
-
-
             }
         }
 
@@ -174,7 +173,7 @@ public class ConvertUtil {
             return decimal.divide(divisor);
         }
 
-        return null;
+        return new BigDecimal(value);
     }
 
     /**
@@ -189,7 +188,7 @@ public class ConvertUtil {
             return value.multiply(multiplier).intValue();
         }
 
-        return null;
+        return value.intValue();
     }
 
 }
