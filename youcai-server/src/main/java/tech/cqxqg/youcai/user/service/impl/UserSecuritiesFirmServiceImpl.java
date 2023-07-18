@@ -49,16 +49,21 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
 
         String userId = RequestContext.getUserId();
 
+        //检查用回顾是否登录
         if (StringUtils.isBlank(userId)) {
             throw new StockException(StockResultCode.USER_NOT_LOGIN);
         }
 
+        //检查公司是否存在
         boolean firmExist = this.isExistSecuritiesFirmById(userSecuritiesFirmsDTO.getSecuritiesFirmId());
         if (!firmExist) {
             throw new StockException(StockResultCode.FIRM_NOT_EXIST);
         }
 
-        boolean userFirmExist = this.isExistUserFirmByUserIdAndFirmId(userSecuritiesFirmsDTO.getUserId(), userSecuritiesFirmsDTO.getSecuritiesFirmId());
+        //检查用户证券公司记录是否存在
+        boolean userFirmExist = this.isExistUserFirmByUserIdAndFirmId(userSecuritiesFirmsDTO.getUserId(),
+                                                                      userSecuritiesFirmsDTO.getSecuritiesFirmId());
+
         if (userFirmExist) {
             throw new StockException(StockResultCode.USER_FIRM_EXIST);
         }
@@ -73,9 +78,13 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
 
         mpUserSecuritiesFirmsService.save(userSecuritiesFirms);
 
+        //证券公司用户数加一
         updateSecuritiesUsers(userSecuritiesFirmsDTO.getSecuritiesFirmId(), UserCountEnum.ADD);
 
-        updateDefault(userSecuritiesFirms.getUserId(), userSecuritiesFirms.getId());
+        if (userSecuritiesFirmsDTO.getIsDefault()) {
+            //设置默认
+            updateDefault(userSecuritiesFirms.getUserId(), userSecuritiesFirms.getId());
+        }
 
 
     }
@@ -84,11 +93,9 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
     public Pagination<UserSecuritiesFirmsVo> getPage(Integer page, Integer pageSize) {
 
         String userId = RequestContext.getUserId();
-        if (StringUtils.isBlank(userId)) {
-            throw new StockException(StockResultCode.USER_NOT_LOGIN);
-        }
 
         if (pageSize > StockConstants.MAX_PAGE_SIZE) {
+            //每页最大显示20条
             pageSize = StockConstants.MAX_PAGE_SIZE;
         }
 
@@ -96,7 +103,7 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
 
         LambdaQueryWrapper<UserSecuritiesFirms> wrapper = new LambdaQueryWrapper<>();
 
-        wrapper.eq(UserSecuritiesFirms::getUserId, Long.valueOf(userId));
+        wrapper.eq(StringUtils.isNotBlank(userId),UserSecuritiesFirms::getUserId, Long.valueOf(userId));
 
         Page<UserSecuritiesFirms> pages = mpUserSecuritiesFirmsService.page(firmsPage, wrapper);
 
@@ -121,7 +128,7 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
             userSecuritiesFirmsVos.add(userSecuritiesFirmsVo);
         }
 
-        Integer total = this.mpUserSecuritiesFirmsService.count(wrapper);
+        Integer total = mpUserSecuritiesFirmsService.count(wrapper);
 
         pageInfo.setTotalSize(total.longValue());
 
@@ -138,8 +145,21 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
     public void updateUserSecuritiesFirm(UserSecuritiesFirmsCommand userSecuritiesFirmsCommand) {
 
         String userId = RequestContext.getUserId();
+
         if (StringUtils.isBlank(userId)) {
             throw new StockException(StockResultCode.USER_NOT_LOGIN);
+        }
+
+        UserSecuritiesFirms securitiesFirms = this.getUserSecuritiesFirms(userSecuritiesFirmsCommand.getId());
+
+        if (securitiesFirms == null){
+            //记录不存在
+            throw new StockException(StockResultCode.USER_FIRM_NOT_EXIST);
+        }
+
+        //校验修改的记录是否为当前用户的
+        if (!securitiesFirms.getUserId().equals(Long.valueOf(userId))){
+            throw new StockException(StockResultCode.USER_AND_FIRM_NO_ACCORD);
         }
 
         UserSecuritiesFirms userSecuritiesFirms = new UserSecuritiesFirms();
@@ -151,30 +171,64 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
         mpUserSecuritiesFirmsService.updateById(userSecuritiesFirms);
 
         if (userSecuritiesFirms.getIsDefault()) {
+            //设置默认
             updateDefault(userSecuritiesFirms.getUserId(), userSecuritiesFirms.getId());
         }
     }
 
     @Override
     public void deleteUserSecuritiesFirm (Long id){
+
         String userId = RequestContext.getUserId();
-        LambdaQueryWrapper<UserSecuritiesFirms> queryWrapper = new LambdaQueryWrapper<>();
 
-        queryWrapper.select(UserSecuritiesFirms::getSecuritiesFirmId, UserSecuritiesFirms::getUserId)
-                .eq(UserSecuritiesFirms::getId, id);
-
-        UserSecuritiesFirms userSecuritiesFirms = mpUserSecuritiesFirmsService.getOne(queryWrapper);
-        if (userSecuritiesFirms != null) {
-            if (!userSecuritiesFirms.getUserId().equals(Long.valueOf(userId))) {
-                throw new StockException(StockResultCode.USER_AND_FIRM_NO_ACCORD);
-            } else {
-                mpUserSecuritiesFirmsService.removeById(id);
-                updateSecuritiesUsers(userSecuritiesFirms.getSecuritiesFirmId(), UserCountEnum.MINUS);
-            }
+        if (StringUtils.isBlank(userId)){
+            throw new StockException(StockResultCode.USER_NOT_LOGIN);
         }
+
+        UserSecuritiesFirms userSecuritiesFirms = getUserSecuritiesFirms(id);
+
+        if (userSecuritiesFirms == null){
+            throw new StockException(StockResultCode.USER_FIRM_NOT_EXIST);
+        }
+
+        //判断删除的记录是否属于当前用户
+        if (!userSecuritiesFirms.getUserId().equals(Long.valueOf(userId))) {
+            throw new StockException(StockResultCode.USER_AND_FIRM_NO_ACCORD);
+        }
+
+        mpUserSecuritiesFirmsService.removeById(id);
+        //证券公司用户数减一
+        updateSecuritiesUsers(userSecuritiesFirms.getSecuritiesFirmId(), UserCountEnum.MINUS);
+
     }
 
 
+
+
+    /**
+     * 查询用户证券公司的用户胡公司id
+     */
+    private UserSecuritiesFirms getUserSecuritiesFirms(Long id) {
+
+        if (id == null){
+            return null;
+        }
+
+        LambdaQueryWrapper<UserSecuritiesFirms> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.select(UserSecuritiesFirms::getSecuritiesFirmId,
+                            UserSecuritiesFirms::getUserId)
+                    .eq(UserSecuritiesFirms::getId, id);
+
+        return mpUserSecuritiesFirmsService.getOne(queryWrapper);
+    }
+
+
+    /**
+     * 修改证券公司记录数
+     * @param securitiesFirmId 证券公司id
+     * @param operation 修改操作
+     */
     private void updateSecuritiesUsers (Long securitiesFirmId, UserCountEnum operation){
 
         if (securitiesFirmId == null) {
@@ -186,7 +240,9 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
         }
 
         LambdaUpdateWrapper<SecuritiesFirms> updateWrapper = new LambdaUpdateWrapper<>();
+
         updateWrapper.eq(SecuritiesFirms::getId, securitiesFirmId);
+
         switch (operation) {
             case ADD:
                 updateWrapper.setSql("count_users = count_users + 1");
@@ -202,6 +258,12 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
 
     }
 
+    /**
+     * 根据用户id和证券公司id查询
+     * @param userId 用户id
+     * @param firmId 证券公司id
+     * @return true:存在 false:不存在
+     */
     private boolean isExistUserFirmByUserIdAndFirmId (Long userId, Long firmId){
 
         LambdaQueryWrapper<UserSecuritiesFirms> wrapper = new LambdaQueryWrapper<>();
@@ -214,6 +276,11 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
         return ExistTypeEnum.NO_EXIST.ordinal() != count;
     }
 
+    /**
+     * 根据证券公司id查询公司
+     * @param firmId 证券公司id
+     * @return true:存在 false:不存在
+     */
     private boolean isExistSecuritiesFirmById (Long firmId){
 
         if (firmId == null) {
@@ -225,9 +292,14 @@ public class UserSecuritiesFirmServiceImpl implements UserSecuritiesFirmService 
 
         int count = mpSecuritiesService.count(wrapper);
 
-        return ExistTypeEnum.EXIST.ordinal() == count;
+        return ExistTypeEnum.NO_EXIST.ordinal() != count;
     }
 
+    /**
+     * 修改用户的默认设置
+     * @param userId 用户id
+     * @param id 用户证卷公司id
+     */
     private void updateDefault(Long userId, Long id){
 
         LambdaUpdateWrapper<UserSecuritiesFirms> wrapper = new LambdaUpdateWrapper<>();

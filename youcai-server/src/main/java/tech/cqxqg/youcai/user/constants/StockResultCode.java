@@ -8,7 +8,8 @@ public enum StockResultCode implements IResultCode {
     FIRM_EXIST(2002, "当前证券公司已存在"),
     FIRM_NOT_EXIST(2003, "当前证券公司不存在"),
     USER_FIRM_EXIST(2004, "用户证券公司记录已存在"),
-    USER_AND_FIRM_NO_ACCORD(2005, "当前用户与当前用户证券公司不符"),
+    USER_FIRM_NOT_EXIST(2005, "用户证券公司记录不存在"),
+    USER_AND_FIRM_NO_ACCORD(2006, "当前用户与当前用户证券公司不符"),
     OPERATION_ABNORMAL(2222, "操作异常");
 
     private Integer code;

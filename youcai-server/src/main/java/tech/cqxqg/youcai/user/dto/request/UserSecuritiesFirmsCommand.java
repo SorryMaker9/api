@@ -14,10 +14,6 @@ public class UserSecuritiesFirmsCommand extends Command implements Serializable 
     @NotNull(message = "param not null")
     Long id;
 
-    private Long userId;
-
-    private Long securitiesFirmId;
-
     private String logo;
 
     private String customName;

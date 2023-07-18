@@ -22,22 +22,6 @@ spring:
       max-lifetime: 3600000
       connection-timeout: 60000
       connection-test-query: SELECT 1
-#dubbo:
-#  application:
-#    name: ${spring.application.name}
-#  scan:
-#    base-packages: tech.cqxqg.youcai
-#  protocol:
-#    name: dubbo
-#    port: -1
-#  registry:
-#    protocol: multicast
-#    address: 239.255.255.255:1234
-#  provider:
-#    timeout: 10000
-#  consumer:
-#    check: false
-#    loadbalance: roundrobin
 logging:
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%15.15t] %-40.40logger{39} : %X{GLOBAL_REQUEST_ID}%m%n"

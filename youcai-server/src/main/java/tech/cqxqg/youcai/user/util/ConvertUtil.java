@@ -11,11 +11,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 金额字段的转换
+ */
 public class ConvertUtil {
 
-
-
+    /**
+     * 排除字段
+     */
     private static final Set<String> EXCLUDED_PROPERTIES = new HashSet();
+    /**
+     * 转换因子
+     */
     private static final Map<String, BigDecimal> MULTIPLY_FACTORY = new HashMap();
 
 
@@ -56,8 +63,10 @@ public class ConvertUtil {
         if (!StringUtils.isBlank(name)) {
             try {
                 if (name.contains("persistence.entity")) {
+                    //转换数据存入到数据库
                     convertToDB(source, destination);
                 } else {
+                    //转换数据展示前端
                     convertToDTO(source, destination);
                 }
             } catch (IllegalAccessException var4) {
@@ -66,67 +75,100 @@ public class ConvertUtil {
         }
     }
 
+    /**
+     *  数据库转前端
+     * @param source 数据库实体
+     * @param destination 接收前端数据实体
+     */
     private static <E, R> void convertToDTO(E source, R destination) throws IllegalAccessException {
+
         Field[] sourceFields = source.getClass().getDeclaredFields();
+
         Field[] destFields = destination.getClass().getDeclaredFields();
-        Field[] var4 = sourceFields;
-        int var5 = sourceFields.length;
 
-        for(int var6 = 0; var6 < var5; ++var6) {
-            Field sourceField = var4[var6];
+
+        for (Field sourceField : sourceFields) {
+
             String fieldName = sourceField.getName();
-            if (!EXCLUDED_PROPERTIES.contains(fieldName)) {
-                Field[] var9 = destFields;
-                int var10 = destFields.length;
 
-                for(int var11 = 0; var11 < var10; ++var11) {
-                    Field destField = var9[var11];
-                    if (fieldName.equals(destField.getName())) {
-                        sourceField.setAccessible(true);
-                        destField.setAccessible(true);
-                        Object value = sourceField.get(source);
-                        if (value instanceof Integer) {
-                            destField.set(destination, convertAndDivide((Integer)value, (BigDecimal)MULTIPLY_FACTORY.get(fieldName)));
-                        }
-                        break;
-                    }
+            if (EXCLUDED_PROPERTIES.contains(fieldName)){
+                //跳过不需要转换的字段
+                continue;
+            }
+
+            for (Field destField : destFields) {
+
+                if (!fieldName.equals(destField.getName())){
+                    continue;
                 }
+
+                sourceField.setAccessible(true);
+
+                destField.setAccessible(true);
+
+                Object value = sourceField.get(source);
+
+                if (value instanceof Integer) {
+                    destField.set(destination, convertAndDivide((Integer)value, MULTIPLY_FACTORY.get(fieldName)));
+                }
+                break;
+
+
             }
         }
 
+
     }
 
+    /**
+     *  前端转数据库
+     * @param source 接收前端数据实体
+     * @param destination 数据库实体
+     */
     private static <E, R> void convertToDB(E source, R destination) throws IllegalAccessException {
         Field[] sourceFields = source.getClass().getDeclaredFields();
+
         Field[] destFields = destination.getClass().getDeclaredFields();
-        Field[] var4 = sourceFields;
-        int var5 = sourceFields.length;
 
-        for(int var6 = 0; var6 < var5; ++var6) {
-            Field sourceField = var4[var6];
+
+        for (Field sourceField : sourceFields) {
+
             String fieldName = sourceField.getName();
-            if (!EXCLUDED_PROPERTIES.contains(fieldName)) {
-                Field[] var9 = destFields;
-                int var10 = destFields.length;
 
-                for(int var11 = 0; var11 < var10; ++var11) {
-                    Field destField = var9[var11];
-                    if (fieldName.equals(destField.getName())) {
-                        sourceField.setAccessible(true);
-                        destField.setAccessible(true);
-                        Object value = sourceField.get(source);
-                        if (value instanceof BigDecimal) {
-                            destField.set(destination, convertAndMultiply((BigDecimal)value, (BigDecimal)MULTIPLY_FACTORY.get(fieldName)));
-                        }
-                        break;
-                    }
+            if (EXCLUDED_PROPERTIES.contains(fieldName)){
+                //跳过不需要转换的字段
+                continue;
+            }
+
+            for (Field destField : destFields) {
+
+                if (!fieldName.equals(destField.getName())){
+                    continue;
                 }
+
+                sourceField.setAccessible(true);
+
+                destField.setAccessible(true);
+
+                Object value = sourceField.get(source);
+
+                if (value instanceof BigDecimal) {
+                    destField.set(destination, convertAndMultiply((BigDecimal) value, MULTIPLY_FACTORY.get(fieldName)));
+                }
+                break;
             }
         }
 
     }
 
+    /**
+     * 缩小倍数
+     * @param value 数据库字段值
+     * @param divisor 倍数
+     * @return
+     */
     private static BigDecimal convertAndDivide(Integer value, BigDecimal divisor) {
+
         if (value != null && divisor != null) {
             BigDecimal decimal = new BigDecimal(value);
             return decimal.divide(divisor);
@@ -135,6 +177,12 @@ public class ConvertUtil {
         return null;
     }
 
+    /**
+     * 扩大倍数
+     * @param value 数据库字段值
+     * @param multiplier 倍数
+     * @return
+     */
     private static Integer convertAndMultiply(BigDecimal value, BigDecimal multiplier) {
 
         if (value != null && multiplier != null){

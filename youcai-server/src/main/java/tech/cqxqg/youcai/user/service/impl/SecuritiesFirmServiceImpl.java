@@ -38,6 +38,7 @@ public class SecuritiesFirmServiceImpl implements SecuritiesFirmService {
     public Pagination<SecuritiesFirmsVo> getPage(String name, Integer page, Integer pageSize) {
 
         if (pageSize > StockConstants.MAX_PAGE_SIZE) {
+            //限制分页条数，最大20条
             pageSize = StockConstants.MAX_PAGE_SIZE;
         }
 
@@ -56,7 +57,9 @@ public class SecuritiesFirmServiceImpl implements SecuritiesFirmService {
         List<SecuritiesFirms> records = pages.getRecords();
 
         if (records.isEmpty()) {
+            //查询结果为空直接返回
             voPagination.setPage(pageInfo);
+
             return voPagination;
         }
 
@@ -65,8 +68,11 @@ public class SecuritiesFirmServiceImpl implements SecuritiesFirmService {
         for (SecuritiesFirms record : records) {
 
             SecuritiesFirmsVo securitiesFirmsVo = new SecuritiesFirmsVo();
+
             BeanUtils.copyProperties(record, securitiesFirmsVo);
+            //转换金额相关字段
             ConvertUtil.convertProperties(record, securitiesFirmsVo);
+
             securitiesFirmsVos.add(securitiesFirmsVo);
         }
 
@@ -86,13 +92,15 @@ public class SecuritiesFirmServiceImpl implements SecuritiesFirmService {
 
         String userId = RequestContext.getUserId();
 
-        if (StringUtils.isEmpty(userId)) {
+        if (StringUtils.isBlank(userId)) {
+            //用户未登录
             throw new StockException(StockResultCode.USER_NOT_LOGIN);
         }
 
         boolean isExistSecuritiesFirm = this.isExistByName(securitiesFirmDTO.getName());
 
         if (isExistSecuritiesFirm) {
+            //公司已存在
             throw new StockException(StockResultCode.FIRM_EXIST);
         }
 
@@ -115,6 +123,7 @@ public class SecuritiesFirmServiceImpl implements SecuritiesFirmService {
         int count = mpSecuritiesService.count(wrapper);
 
         if (ExistTypeEnum.NO_EXIST.ordinal() == count) {
+            //公司不存在
             throw new StockException(StockResultCode.FIRM_NOT_EXIST);
         }
 
@@ -133,7 +142,14 @@ public class SecuritiesFirmServiceImpl implements SecuritiesFirmService {
         mpSecuritiesService.removeById(id);
     }
 
+
+    /**
+     * 根据公司名称查询公司是否存在
+     * @param name 公司名称
+     * @return true:存在  false:不存在
+     */
     private boolean isExistByName(String name) {
+
         if (StringUtils.isBlank(name)) {
             return false;
         }
@@ -143,6 +159,6 @@ public class SecuritiesFirmServiceImpl implements SecuritiesFirmService {
 
         int count = mpSecuritiesService.count(wrapper);
 
-        return ExistTypeEnum.EXIST.ordinal() == count;
+        return ExistTypeEnum.NO_EXIST.ordinal() != count;
     }
 }
