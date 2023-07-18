@@ -1,6 +1,7 @@
 package tech.cqxqg.youcai.persistence.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.swak.frame.dto.base.Entity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @TableName("user_securities_firms")
-public class UserSecuritiesFirms implements Serializable {
+public class UserSecuritiesFirms extends Entity {
 
     private static final long serialVersionUID = 1L;
 
