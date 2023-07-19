@@ -117,6 +117,7 @@ public class UserCsBuys implements Serializable {
     /**
      * 个人备注
      */
+    @TableField("`remark`")
     private String remark;
     /**
      * 未售出股数
@@ -136,6 +137,7 @@ public class UserCsBuys implements Serializable {
     /**
      * 证券获得方式 0-正常买入,1-送股,2-转增股
      */
+    @TableField("`from`")
     private Integer from;
     /**
      * 创建时间

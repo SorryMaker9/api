@@ -1,5 +1,6 @@
 package tech.cqxqg.youcai.user.dto;
 
+import com.swak.frame.dto.base.VO;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,7 +17,7 @@ import java.util.Date;
  */
 @Data
 @ToString
-public class UserCsBuysVo implements Serializable {
+public class UserCsBuysVo implements VO {
 
     private static final long serialVersionUID = 1L;
 
@@ -121,15 +122,5 @@ public class UserCsBuysVo implements Serializable {
      * 证券获得方式 0-正常买入,1-送股,2-转增股
      */
     private Integer from;
-    /**
-     * 创建时间
-     */
-
-    private Date createdAt;
-    /**
-     * 更新时间
-     */
-
-    private Date updatedAt;
 
 }
