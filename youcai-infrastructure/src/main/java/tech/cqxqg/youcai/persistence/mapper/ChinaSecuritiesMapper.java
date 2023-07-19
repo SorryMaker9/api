@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import tech.cqxqg.youcai.persistence.entity.ChinaSecurities;
 
 @Repository
-public interface SecuritiesMapper extends BaseMapper<ChinaSecurities>  {
+public interface ChinaSecuritiesMapper extends BaseMapper<ChinaSecurities>  {
 
 }

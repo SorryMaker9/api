@@ -15,7 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import tech.cqxqg.youcai.core.enums.ResultCode;
 import tech.cqxqg.youcai.persistence.entity.ChinaSecurities;
-import tech.cqxqg.youcai.persistence.service.MpSecuritiesService;
+import tech.cqxqg.youcai.persistence.service.MpChinaSecuritiesService;
 import tech.cqxqg.youcai.user.constants.SecuritiesResultCode;
 import tech.cqxqg.youcai.user.converter.SecuritiesConverter;
 import tech.cqxqg.youcai.user.dto.SecuritiesVo;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 public class SecuritiesServiceImpl implements SecuritiesService {
     @Resource
-    private MpSecuritiesService mpSecuritiesService;
+    private MpChinaSecuritiesService mpSecuritiesService;
     @Resource
     private SecuritiesConverter securitiesConverter;
 
