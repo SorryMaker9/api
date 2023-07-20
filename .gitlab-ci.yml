@@ -8,7 +8,7 @@ build:
   only:
     - dev
   script:
-    - $MAVEN_HOME/bin/mvn clean package '-Dmaven.test.skip=true'
+    - mvn clean package '-Dmaven.test.skip=true'
     - cp ./youcai-admin/target/youcai-admin-1.0.0-SNAPSHOT.jar docker/
     - cd docker
     - docker build -t dev/youcai:v1.0.0 .
