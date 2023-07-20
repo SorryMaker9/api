@@ -1,4 +1,4 @@
-package tech.cqxqg.youcai.user.dto;
+package tech.cqxqg.youcai.user.dto.vo;
 
 import com.swak.frame.dto.base.VO;
 import lombok.Data;
