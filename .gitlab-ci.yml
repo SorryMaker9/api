@@ -9,7 +9,7 @@ build:
     - dev
   script:
     - $MAVEN_HOME/bin/mvn clean package '-Dmaven.test.skip=true'
-    - cp ./XXX/target/XXX.jar docker/
+    - cp ./youcai-admin/target/youcai-admin-1.0.0-SNAPSHOT.jar docker/
     - cd docker
     - docker build -t dev/youcai:v1.0.0 .
   tags:
