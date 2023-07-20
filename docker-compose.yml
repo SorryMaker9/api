@@ -7,4 +7,4 @@ services:
     network_mode: "host"
     volumes:
       - /opt/youcai-admin-server/logs:/youcai-admin/logs
-    command: java -jar -Xms1024m -Xmx1024m -Duser.timezone=GMT+08 youcai-admin-api.jar --spring.profiles.active=dev
+    command: java -jar -Xms1024m -Xmx1024m -Duser.timezone=GMT+08 youcai-admin-1.0.0-SNAPSHOT.jar --spring.profiles.active=dev
