@@ -1,10 +1,9 @@
 package tech.cqxqg.youcai.persistence.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -134,6 +133,11 @@ public class UserCsBuys implements Serializable {
      */
     @TableField("is_sell_entrusted")
     private Integer isSellEntrusted;
+    /**
+     * 逻辑删除
+     */
+    @TableLogic(value = "0",delval = "1")
+    private Integer isDelete;
     /**
      * 证券获得方式 0-正常买入,1-送股,2-转增股
      */

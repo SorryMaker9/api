@@ -1,4 +1,4 @@
-package tech.cqxqg.youcai.user.dto;
+package tech.cqxqg.youcai.user.dto.dto;
 
 import lombok.Data;
 
@@ -21,4 +21,6 @@ public class BondsDto {
     private Integer buyPrice;
     //买入数量
     private Integer number;
+    //个人备注
+    private String remark;
 }

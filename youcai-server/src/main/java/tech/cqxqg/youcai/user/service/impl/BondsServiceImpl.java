@@ -8,7 +8,6 @@ import com.swak.frame.dto.Pagination;
 import com.swak.frame.dto.Result;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import tech.cqxqg.youcai.core.enums.ResultCode;
@@ -16,10 +15,9 @@ import tech.cqxqg.youcai.persistence.entity.UserCsBuys;
 import tech.cqxqg.youcai.persistence.entity.UserCsSells;
 import tech.cqxqg.youcai.persistence.service.MpUserCsBuysService;
 import tech.cqxqg.youcai.persistence.service.MpUserCsSellsService;
-import tech.cqxqg.youcai.user.converter.SecuritiesConverter;
 import tech.cqxqg.youcai.user.converter.UserCsBuysConverter;
 import tech.cqxqg.youcai.user.converter.UserCsSellsConverter;
-import tech.cqxqg.youcai.user.dto.BondsDto;
+import tech.cqxqg.youcai.user.dto.dto.BondsDto;
 import tech.cqxqg.youcai.user.dto.BondsVo;
 import tech.cqxqg.youcai.user.dto.SecuritiesVo;
 import tech.cqxqg.youcai.user.dto.UserCsBuysVo;
@@ -122,6 +120,8 @@ public class BondsServiceImpl implements BondsService {
         userCsBuys.setBoughtAt(buyTime);
         userCsBuys.setCreatedAt(new Date());
         userCsBuys.setUserId(123456);
+        userCsBuys.setIsDelete(0);
+        userCsBuys.setRemark(bondsDto.getRemark());
         //返回数据
         BondsVo bondsVo = new BondsVo();
         bondsVo.setNumber(bondsDto.getNumber());
@@ -201,9 +201,10 @@ public class BondsServiceImpl implements BondsService {
 
         userCsSellsCommand.setHoldingDays(day.intValue());
         userCsBuys.setSellIntro("于" + sfDay.format(new Date()) + "，以" + sellCost + "分价格将" + userCsSellsCommand.getNumber() + "股全部卖出");
+        userCsBuys.setCreatedAt(new Date());
+        /*userCsBuys.setRemark(bondsDto.getRemark());*/
 
         UserCsSells userCsSells = userCsSellsConverter.toEntity(userCsSellsCommand);
-
         mpUserCsBuysService.updateById(userCsBuys);
         HashMap<String, Object> map = new HashMap<>();
         map.put("fee",userCsSells.getFee1() + userCsSells.getCsfFee());
@@ -227,6 +228,7 @@ public class BondsServiceImpl implements BondsService {
     @Override
     public Result<Pagination<UserCsBuysVo>> queryUserCsBuyList(UserCsBuysPageReq query) {
         QueryWrapper<UserCsBuys> queryWrapper = new QueryWrapper<>();
+        //todo 获取用户数据
         queryWrapper.lambda().eq(query.getUserId() != null , UserCsBuys::getUserId, query.getUserId());
         IPage<UserCsBuys> page = mpUserCsBuysService.page(new Page<>(query.getCurrentPage(), query.getPageSize()), queryWrapper);
         List<UserCsBuysVo> userCsBuysVos = page.getRecords().stream().map(userCsBuysConverter::entityToVo).collect(Collectors.toList());
@@ -235,5 +237,11 @@ public class BondsServiceImpl implements BondsService {
         }
         return Result.success(Pagination.builder(userCsBuysVos, PageInfo.page(query, page.getTotal())));
     }
+
+    @Override
+    public Result<Void> deleteBuyBondsRecordById(Integer id) {
+        return mpUserCsBuysService.getBaseMapper().deleteById(id) == 1 ? Result.success() : Result.fail(ResultCode.UPDATE_ERROR);
+    }
+
 
 }
