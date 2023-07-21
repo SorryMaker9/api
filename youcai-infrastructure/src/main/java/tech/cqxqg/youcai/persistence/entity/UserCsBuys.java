@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import java.io.Serializable;
 @TableName("user_cs_buys")
 @Data
 @ToString
+@Getter
 public class UserCsBuys implements Serializable {
 
     private static final long serialVersionUID = 1L;

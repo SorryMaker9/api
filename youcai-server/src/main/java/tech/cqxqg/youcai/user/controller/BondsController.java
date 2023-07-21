@@ -36,9 +36,12 @@ public class BondsController {
     public Result<Pagination<UserCsBuysVo>> queryUserCsBuyList(@ModelAttribute @Validated UserCsBuysPageReq query){
         return bondsService.queryUserCsBuyList(query);
     }
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/deleteBuy/{id}")
     public Result<Void> deleteBuyBondsRecord(@PathVariable(value = "id")Integer id){
-
         return bondsService.deleteBuyBondsRecordById(id);
+    }
+    @DeleteMapping(value = "/deleteSell/{id}")
+    public Result<Void> deleteSellBondsRecord(@PathVariable(value = "id")Integer id){
+        return bondsService.deleteSellBondsRecordById(id);
     }
 }

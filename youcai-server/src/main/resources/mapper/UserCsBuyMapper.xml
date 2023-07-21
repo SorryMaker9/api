@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.cqxqg.youcai.persistence.mapper.UserCsBuysMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="tech.cqxqg.youcai.persistence.entity.UserCsBuys">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="user_csf_id" property="userCsfId" />
+        <result column="code" property="code" />
+        <result column="user_cs_id" property="userCsId" />
+        <result column="bought_at" property="boughtAt" />
+        <result column="price" property="price" />
+        <result column="number" property="number" />
+        <result column="user_csfh_id" property="userCsfhId" />
+        <result column="fee_1" property="fee1" />
+        <result column="csf_fee" property="csfFee" />
+        <result column="cost_price" property="costPrice" />
+        <result column="is_locked" property="isLocked" />
+        <result column="source_investment" property="sourceInvestment" />
+        <result column="manual_unsold_number" property="manualUnsoldNumber" />
+        <result column="manual_unsold_interests" property="manualUnsoldInterests" />
+        <result column="interest_computed_at" property="interestComputedAt" />
+        <result column="sell_status" property="sellStatus" />
+        <result column="sell_intro" property="sellIntro" />
+        <result column="remark" property="remark" />
+        <result column="fifo_unsold_number" property="fifoUnsoldNumber" />
+        <result column="is_buy_entrusted" property="isBuyEntrusted" />
+        <result column="is_sell_entrusted" property="isSellEntrusted" />
+        <result column="from" property="from" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+    </resultMap>
+    <select id="selectUserCsBuysByUserIdAndCode" resultMap="BaseResultMap">
+        SELECT id,user_id,user_csf_id,code,user_cs_id,bought_at,price,`number`,user_csfh_id,fee_1,csf_fee,cost_price,is_locked,source_investment,manual_unsold_number,manual_unsold_interests,interest_computed_at,sell_status,sell_intro,`remark`,fifo_unsold_number,is_buy_entrusted,is_sell_entrusted,is_delete,`from`,created_at,updated_at
+        FROM user_cs_buys
+        where user_id = #{userId} and `code` = #{code} and is_delete = 1;
+    </select>
+    <update id="recoveryById" parameterType="tech.cqxqg.youcai.persistence.entity.UserCsBuys">
+        update user_cs_buys set `is_delete` = #{isDelete},`number` = #{number}, sell_status = #{sellStatus},sell_intro = #{sellIntro}, updated_at = #{updatedAt} where id = #{id}
+        <!--<set>
+            <if test="number != null">
+                `number` = #{number},
+            </if>
+            <if test="sellStatus != null">
+                `sell_status` = #{sellStatus},
+            </if>
+            <if test="sellIntro != null and sellIntro != ''">
+                sell_intro = #{sellIntro},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+        </set>
+        where id = #{id}-->
+    </update>
+</mapper>

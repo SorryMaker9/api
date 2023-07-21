@@ -1,5 +1,6 @@
 package tech.cqxqg.youcai.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import tech.cqxqg.youcai.core.enums.ResultCode;
 import tech.cqxqg.youcai.persistence.entity.UserCsBuys;
 import tech.cqxqg.youcai.persistence.entity.UserCsSells;
+import tech.cqxqg.youcai.persistence.mapper.UserCsBuysMapper;
 import tech.cqxqg.youcai.persistence.service.MpUserCsBuysService;
 import tech.cqxqg.youcai.persistence.service.MpUserCsSellsService;
 import tech.cqxqg.youcai.user.converter.UserCsBuysConverter;
@@ -56,6 +58,9 @@ public class BondsServiceImpl implements BondsService {
     @Resource
     private UserCsSellsConverter userCsSellsConverter;
 
+    @Resource
+    private UserCsBuysMapper userCsBuysMapper;
+
     @Override
     public Result<BondsVo> buyBonds(BondsDto bondsDto) throws ParseException {
 
@@ -63,17 +68,17 @@ public class BondsServiceImpl implements BondsService {
         if (securitiesVo == null) {
             return Result.fail(1401, "没有查询到该股票");
         }
-        if(bondsDto.getNumber() <= 0 ){
+        if (bondsDto.getNumber() <= 0) {
             return Result.fail(1401, "您输入的购买数量有错，请检查后重新提交");
         }
-        if(bondsDto.getBuyPrice() <= 0){
+        if (bondsDto.getBuyPrice() <= 0) {
             return Result.fail(1401, "数据错误，请重试");
         }
         if (securitiesVo.getStockAmount() - bondsDto.getNumber() < 0) {
             return Result.fail(1401, "股票数量不足");
         }
         SecuritiesCommand command = new SecuritiesCommand();
-        BeanUtils.copyProperties(securitiesVo,command);
+        BeanUtils.copyProperties(securitiesVo, command);
         command.setStockAmount(command.getStockAmount() - bondsDto.getNumber());
 
 
@@ -132,10 +137,10 @@ public class BondsServiceImpl implements BondsService {
     }
 
     @Override
-    public Result<HashMap<String,Object>> sellBonds(BondsDto bondsDto) throws ParseException {
+    public Result<HashMap<String, Object>> sellBonds(BondsDto bondsDto) throws ParseException {
         //UserCsBuysVo userCsBuysVo = queryUserCsBuysByCode(bondsDto.getCode());
         UserCsBuysVo userCsBuysVo = queryUserCsBuysById(bondsDto.getId());
-        if(userCsBuysVo == null){
+        if (userCsBuysVo == null) {
             return Result.fail(1401, "没有查询到该股票");
         }
         if (userCsBuysVo.getNumber() - bondsDto.getNumber() < 0) {
@@ -207,9 +212,9 @@ public class BondsServiceImpl implements BondsService {
         UserCsSells userCsSells = userCsSellsConverter.toEntity(userCsSellsCommand);
         mpUserCsBuysService.updateById(userCsBuys);
         HashMap<String, Object> map = new HashMap<>();
-        map.put("fee",userCsSells.getFee1() + userCsSells.getCsfFee());
-        map.put("price",userCsSells.getPrice());
-        map.put("number",userCsSells.getNumber());
+        map.put("fee", userCsSells.getFee1() + userCsSells.getCsfFee());
+        map.put("price", userCsSells.getPrice());
+        map.put("number", userCsSells.getNumber());
         return mpUserCsSellsService.save(userCsSells) ? Result.success(map) : Result.fail(ResultCode.UPDATE_ERROR);
     }
 
@@ -221,7 +226,7 @@ public class BondsServiceImpl implements BondsService {
 
     @Override
     public UserCsBuysVo queryUserCsBuysById(Integer id) {
-        return mpUserCsBuysService.lambdaQuery().eq(id != null,UserCsBuys::getId,id)
+        return mpUserCsBuysService.lambdaQuery().eq(id != null, UserCsBuys::getId, id)
                 .list().stream().findFirst().map(userCsBuysConverter::entityToVo).orElse(null);
     }
 
@@ -229,10 +234,10 @@ public class BondsServiceImpl implements BondsService {
     public Result<Pagination<UserCsBuysVo>> queryUserCsBuyList(UserCsBuysPageReq query) {
         QueryWrapper<UserCsBuys> queryWrapper = new QueryWrapper<>();
         //todo 获取用户数据
-        queryWrapper.lambda().eq(query.getUserId() != null , UserCsBuys::getUserId, query.getUserId());
+        queryWrapper.lambda().eq(query.getUserId() != null, UserCsBuys::getUserId, query.getUserId());
         IPage<UserCsBuys> page = mpUserCsBuysService.page(new Page<>(query.getCurrentPage(), query.getPageSize()), queryWrapper);
         List<UserCsBuysVo> userCsBuysVos = page.getRecords().stream().map(userCsBuysConverter::entityToVo).collect(Collectors.toList());
-        if(CollectionUtils.isEmpty(userCsBuysVos)){
+        if (CollectionUtils.isEmpty(userCsBuysVos)) {
             return Result.success(Pagination.builder(Collections.emptyList(), PageInfo.page(query, 0L)));
         }
         return Result.success(Pagination.builder(userCsBuysVos, PageInfo.page(query, page.getTotal())));
@@ -243,5 +248,33 @@ public class BondsServiceImpl implements BondsService {
         return mpUserCsBuysService.getBaseMapper().deleteById(id) == 1 ? Result.success() : Result.fail(ResultCode.UPDATE_ERROR);
     }
 
+    @Override
+    public Result<Void> deleteSellBondsRecordById(Integer id) {
+        UserCsSells userCsSells = mpUserCsSellsService.getBaseMapper().selectById(id);
+        if (userCsSells == null) {
+            return Result.fail(1401, "没有查询到卖出记录");
+        }
+        UserCsBuysVo userCsBuysVo = queryUserCsBuyByUserIdAndCode(userCsSells.getUserId(), userCsSells.getCode());
+        if(userCsBuysVo == null) {
+            return Result.fail(1401,"没有查询到买入记录");
+        }
+        UserCsBuys userCsBuys = new UserCsBuys();
+        BeanUtils.copyProperties(userCsBuysVo,userCsBuys);
+
+        userCsBuys.setIsDelete(0);
+        userCsBuys.setSellStatus(0);
+        userCsBuys.setSellIntro("");
+        userCsBuys.setUpdatedAt(new Date());
+        userCsBuys.setNumber(userCsSells.getNumber());
+        int i = userCsBuysMapper.recoveryById(userCsBuys);
+        if (i != 1){
+            return Result.fail(1401,"恢复数据失败");
+        }
+        return mpUserCsSellsService.removeById(id) ? Result.success() : Result.fail(ResultCode.DELETE_ERROR);
+    }
+
+    private UserCsBuysVo queryUserCsBuyByUserIdAndCode(Integer userId, String code) {
+        return userCsBuysConverter.entityToVo(userCsBuysMapper.selectUserCsBuysByUserIdAndCode(userId,code));
+    }
 
 }

@@ -22,4 +22,6 @@ public interface BondsService {
     public Result<Pagination<UserCsBuysVo>> queryUserCsBuyList(UserCsBuysPageReq query);
 
     public Result<Void> deleteBuyBondsRecordById(Integer id);
+
+    public Result<Void> deleteSellBondsRecordById(Integer id);
 }
