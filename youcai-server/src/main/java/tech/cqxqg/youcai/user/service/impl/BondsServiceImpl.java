@@ -11,6 +11,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.cqxqg.youcai.core.enums.ResultCode;
 import tech.cqxqg.youcai.persistence.entity.UserCsBuys;
 import tech.cqxqg.youcai.persistence.entity.UserCsSells;
@@ -62,6 +63,7 @@ public class BondsServiceImpl implements BondsService {
     private UserCsBuysMapper userCsBuysMapper;
 
     @Override
+    @Transactional
     public Result<BondsVo> buyBonds(BondsDto bondsDto) throws ParseException {
 
         SecuritiesVo securitiesVo = securitiesService.selectSecuritiesByCode(bondsDto.getCode());
@@ -137,6 +139,7 @@ public class BondsServiceImpl implements BondsService {
     }
 
     @Override
+    @Transactional
     public Result<HashMap<String, Object>> sellBonds(BondsDto bondsDto) throws ParseException {
         //UserCsBuysVo userCsBuysVo = queryUserCsBuysByCode(bondsDto.getCode());
         UserCsBuysVo userCsBuysVo = queryUserCsBuysById(bondsDto.getId());
@@ -249,6 +252,7 @@ public class BondsServiceImpl implements BondsService {
     }
 
     @Override
+    @Transactional
     public Result<Void> deleteSellBondsRecordById(Integer id) {
         UserCsSells userCsSells = mpUserCsSellsService.getBaseMapper().selectById(id);
         if (userCsSells == null) {
