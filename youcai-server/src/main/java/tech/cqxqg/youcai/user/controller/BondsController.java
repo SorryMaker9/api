@@ -5,14 +5,13 @@ import com.swak.frame.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import tech.cqxqg.youcai.user.dto.BondsDto;
+import tech.cqxqg.youcai.user.dto.dto.BondsDto;
 import tech.cqxqg.youcai.user.dto.BondsVo;
 import tech.cqxqg.youcai.user.dto.UserCsBuysVo;
 import tech.cqxqg.youcai.user.dto.request.UserCsBuysPageReq;
 import tech.cqxqg.youcai.user.service.BondsService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.HashMap;
 
@@ -36,5 +35,13 @@ public class BondsController {
     @GetMapping(value = "/list")
     public Result<Pagination<UserCsBuysVo>> queryUserCsBuyList(@ModelAttribute @Validated UserCsBuysPageReq query){
         return bondsService.queryUserCsBuyList(query);
+    }
+    @DeleteMapping(value = "/deleteBuy/{id}")
+    public Result<Void> deleteBuyBondsRecord(@PathVariable(value = "id")Integer id){
+        return bondsService.deleteBuyBondsRecordById(id);
+    }
+    @DeleteMapping(value = "/deleteSell/{id}")
+    public Result<Void> deleteSellBondsRecord(@PathVariable(value = "id")Integer id){
+        return bondsService.deleteSellBondsRecordById(id);
     }
 }
