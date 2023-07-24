@@ -1,36 +1,39 @@
 stages:
   - build
-  - deploy_dev
-  - clean
+#  - release
 # 打包镜像
 build:
   stage: build
   only:
     - dev
+  after_script:
+    rm -rf $CI_PROJECT_PATH
   script:
+    - echo $CI_PROJECT_PATH
+    - pwd
     - mvn clean package '-Dmaven.test.skip=true'
-    - cp ./youcai-admin/target/youcai-admin-1.0.0-SNAPSHOT.jar docker/
-    - cd docker
-    - docker build -t dev/youcai:v1.0.0 .
+    - mkdir -p /home/webroot/$CI_PROJECT_PATH
+    - cp -rf ./youcai-server/target/youcai-server*.jar /home/webroot/$CI_PROJECT_PATH
   tags:
-    - maven
-# 部署开发服务器
-deploy_dev:
-  stage: deploy_dev
-  only:
-    - dev
-  script:
-    - cd docker
-    - docker-compose down
-    - docker-compose up -d
-  tags:
-    - maven
-#清理虚悬镜像
-clean:
-  stage: clean
-  only:
-    - dev
-  script:
-    - docker rmi $(docker images -q -f dangling=true)
-  tags:
-    - maven
+    - shell
+
+
+
+#release:
+#  stage: release
+#  script:
+#    - echo "开始发布"
+#    - /home/gitlab-runner/shell_run ${parent_project_url} ${project_name} ${project_jar_name}
+#  only:
+#    - dev
+#  tags:
+#    - shell  #对应runner的tags
+
+#相当于定义全局常量  如果改字段定义在job内，相当于局部常量
+variables:
+  # 项目父路径
+  parent_project_url: youcaizhushou
+  # 子项目名，及jar包名
+  project_name: api
+  project_jar_name: youcai-server-1.0.0-SNAPSHOT.jar
+  #git_url: http://gitlab.lawyer5.cn/youcaizhushou/api.git
